@@ -17,6 +17,7 @@ class StudentInfoResource extends JsonResource
     public function toArray($request): array|\JsonSerializable|Arrayable
     {
         return [
+            'id' => $this->id,
             'full_name' => $this->full_name,
             'email_id' => $this->email_id,
             'phone_number' => $this->phone_number

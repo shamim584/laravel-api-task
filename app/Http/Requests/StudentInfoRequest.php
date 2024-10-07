@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
- 
+
 
 class StudentInfoRequest extends FormRequest
 {
@@ -24,19 +24,15 @@ class StudentInfoRequest extends FormRequest
      */
     public function rules(): array
     {
-
         return [
             'full_name' => 'required',
             //'email_id' => 'required|unique:student_infos',        
-            'email_id' => [ 
+            'email_id' => [
                 'required',
-                Rule::unique('student_infos')->ignore($this->id), 
+                Rule::unique('student_infos')->ignore($this->id),
             ],
             'phone_number' => 'required',
- 
+
         ];
-
     }
-
-    
 }

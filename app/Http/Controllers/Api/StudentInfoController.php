@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StudentInfoRequest;
 use App\Models\StudentInfo;
 use App\Services\StudentInfoService;
 use App\Http\Resources\StudentInfoResource;
 use App\Http\Resources\StudentInfoCollection;
 use Illuminate\Http\Request;
-use App\Http\Requests\StudentInfoRequest;
-
+use App\Http\Requests\StudentInfoRequestStudentInfoRequest;
+use Illuminate\Validation\Rule;
 
 class StudentInfoController extends Controller
 {
@@ -47,10 +48,11 @@ class StudentInfoController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(StudentInfo $studentInfo, $id)
+    public function show(StudentInfo $student)
     {
+        // dd($student);
         try {
-            $info = new StudentInfoResource(StudentInfo::find($id));
+            $info = new StudentInfoResource($student);
             return response()->json(['status' => true, 'data' => $info, 'message' => 'success']);
         } catch (\Throwable $th) {
             return response()->json(['status' => false, 'data' => '', 'message' => $th->getMessage()], 422);
@@ -68,12 +70,15 @@ class StudentInfoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(StudentInfoRequest $request, StudentInfo $studentInfo,$id)
+    public function update(StudentInfoRequest $request, StudentInfo $student)
     {
-        
         try {
-            $studentInfo->where('id',$id)->update($request->validated());
-            return response()->json(['status' => true, 'data' => $studentInfo, 'message' => 'Student info updated successfully']);
+            $validatedData = $request->validated();
+
+            $student->update($validatedData);
+            // $student = StudentInfo::where('id', $id)->update($validatedData);
+
+            return response()->json(['status' => true, 'data' => (new StudentInfoResource($student)), 'message' => 'Student info updated successfully']);
         } catch (\Throwable $th) {
             return response()->json(['status' => false, 'data' => '', 'message' => $th->getMessage()], 422);
         }
